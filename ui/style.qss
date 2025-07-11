@@ -1,0 +1,127 @@
+QWidget {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    font-family: "Segoe UI", "Arial", sans-serif;
+    font-size: 14px;
+}
+
+QListWidget {
+    background-color: #2b2b2b;
+    border: 1px solid #444;
+    padding: 5px;
+}
+
+QListWidget::item {
+    padding: 6px 10px;
+    height: 28px;
+    border-bottom: 1px solid #333;
+}
+
+QListWidget::item:selected {
+    background-color: #3c3c3c;
+    color: #a4d07b;
+    border-left: 5px solid #4caf50;
+}
+
+QGroupBox {
+    border: 1px solid #444;
+    border-radius: 4px;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #252525;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 0 3px;
+    color: #a4d07b;
+    font-weight: bold;
+}
+
+QLineEdit, QComboBox {
+    background-color: #2b2b2b;
+    border: 1px solid #555;
+    padding: 6px;
+    color: #e0e0e0;
+    border-radius: 3px;
+}
+
+QLabel {
+    background: transparent;
+    border: none;
+    color: #ccc;
+}
+
+QPushButton {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: #66bb6a;
+}
+
+QPushButton:pressed {
+    background-color: #388e3c;
+}
+
+QPushButton#SettingsButton {
+    background-color: #3a3a3a;
+    color: #fff;
+    padding: 8px;
+    height: 32px;
+    width: 285px;
+    border-radius: 3px;
+}
+
+QPushButton#SettingsButton:hover {
+    background-color: #505050;
+}
+
+QCheckBox, QRadioButton {
+    padding: 2px;
+    spacing: 6px;
+}
+
+QCheckBox::indicator, QRadioButton::indicator {
+    width: 16px;
+    height: 16px;
+}
+
+QCheckBox::indicator:checked,
+QRadioButton::indicator:checked {
+    background-color: #a4d07b;
+    border: 1px solid #555;
+}
+QCheckBox::indicator,
+QRadioButton::indicator {
+    background-color: #444;
+    border: 1px solid #555;
+}
+
+QScrollBar:vertical, QScrollBar:horizontal {
+    background-color: #1c1c1c;
+    border: none;
+    width: 10px;
+    margin: 2px;
+}
+
+QScrollBar::handle {
+    background-color: #444;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:hover {
+    background-color: #666;
+}
+
+QScrollBar::add-line, QScrollBar::sub-line {
+    background: none;
+    border: none;
+    height: 0;
+}

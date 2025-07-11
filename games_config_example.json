@@ -1,0 +1,32 @@
+{
+  "Minecraft: Java Edition": {
+    "type": "flatpak",
+    "exec_path": "org.prismlauncher.PrismLauncher",
+    "instances_path": "/home/user/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/instances",
+    "show": true
+  },
+  "Minecraft: Bedrock Edition": {
+    "type": "flatpak",
+    "exec_path": "io.mrarm.mcpelauncher",
+    "show": true
+  },
+  "Minecraft Dungeons": {
+    "show": false
+  },
+  "Minecraft Legends": {
+    "show": false
+  },
+  "Minecraft: Story Mode": {
+    "exec_path": "lutris:rungame/minecraft-story-mode",
+    "show": false
+  },
+  "Minecraft Story Mode: Season 2": {
+    "exec_path": "lutris:rungame/minecraft-story-mode-season-2",
+    "show": false
+  },
+  "Minecraft: Xbox 360 Edition": {
+    "exec_path": "/path/to/xenia",
+    "rom_path": "/path/to/minecraft",
+    "show": false
+  }
+}
