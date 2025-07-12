@@ -1,4 +1,7 @@
 /games_config.json
 /build
 /dist
-/main.spec
+/repo
+/builddir
+/.venv
+/.flatpak-builder

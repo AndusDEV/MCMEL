@@ -22,13 +22,13 @@ class Launcher(QWidget):
             self.game_configs = json.load(f)
 
         self.games = [
-            GameInfo("Minecraft: Java Edition", "./images/mcje.png", "./icons/game/mcje.png"),
-            GameInfo("Minecraft: Bedrock Edition", "./images/mcbe.png", "./icons/game/mcbe.png"),
-            GameInfo("Minecraft Dungeons", "./images/mcd.png", "./icons/game/mcd.png"),
-            GameInfo("Minecraft Legends", "./images/mcl.png", "./icons/game/mcl.png"),
-            GameInfo("Minecraft: Story Mode", "./images/mcsm.jpg", "./icons/game/mcsm.png"),
-            GameInfo("Minecraft Story Mode: Season 2", "./images/mcsm2.jpg", "./icons/game/mcsm2.png"),
-            GameInfo("Minecraft: Xbox 360 Edition", "./images/mc360.png", "./icons/game/mc360.png"),
+            GameInfo("Minecraft: Java Edition", "./assets/images/mcje.png", "./assets/icons/game/mcje.png"),
+            GameInfo("Minecraft: Bedrock Edition", "./assets/images/mcbe.png", "./assets/icons/game/mcbe.png"),
+            GameInfo("Minecraft Dungeons", "./assets/images/mcd.png", "./assets/icons/game/mcd.png"),
+            GameInfo("Minecraft Legends", "./assets/images/mcl.png", "./assets/icons/game/mcl.png"),
+            GameInfo("Minecraft: Story Mode", "./assets/images/mcsm.jpg", "./assets/icons/game/mcsm.png"),
+            GameInfo("Minecraft Story Mode: Season 2", "./assets/images/mcsm2.jpg", "./assets/icons/game/mcsm2.png"),
+            GameInfo("Minecraft: Xbox 360 Edition", "./assets/images/mc360.png", "./assets/icons/game/mc360.png"),
         ]
 
         self.games = [g for g in self.games if self.game_configs.get(g.name, {}).get("show", False)]
@@ -50,7 +50,7 @@ class Launcher(QWidget):
             self.game_list.addItem(item)
 
         self.settings_button = QPushButton()
-        self.settings_button.setIcon(QIcon("./icons/settings.png"))
+        self.settings_button.setIcon(QIcon("./assets/icons/settings.png"))
         self.settings_button.setText("Settings")
         self.settings_button.clicked.connect(self.open_settings)
         self.settings_button.setObjectName("SettingsButton")
@@ -70,7 +70,7 @@ class Launcher(QWidget):
         self.launch_button = QPushButton("Launch")
 
         self.open_launcher_button = QPushButton()
-        self.open_launcher_button.setIcon(QIcon("./icons/open_launcher.png"))
+        self.open_launcher_button.setIcon(QIcon("./assets/icons/open_launcher.png"))
         self.open_launcher_button.setIconSize(self.launch_button.sizeHint())
         self.open_launcher_button.setText("Open Original Launcher")
         self.open_launcher_button.hide()
@@ -87,7 +87,7 @@ class Launcher(QWidget):
         self.setLayout(main_layout)
         self.setWindowTitle("Minecraft: Multi-Edition Launcher")
         self.setFixedSize(1000, 640)
-        self.load_stylesheet("ui/style.qss")
+        self.load_stylesheet("assets/ui/style.qss")
         self.game_list.currentRowChanged.connect(self.on_game_selected)
         self.launch_button.clicked.connect(self.on_launch_clicked)
 
@@ -185,6 +185,8 @@ class Launcher(QWidget):
             QMessageBox.warning(self, "Error", "No exec path configured.")
             return
 
+        args = []
+
         if game.name == "Minecraft: Java Edition":
             instance = self.version_selector.currentText()
             if instance in ("No instances found", "", None):
@@ -222,6 +224,7 @@ class Launcher(QWidget):
             subprocess.Popen(args, cwd=parent, env=env)
             return
         else:
+            QMessageBox.warning(self, "Unknown Game Type", f"Handling for {game.name} is not defined.")
             return
 
         try:

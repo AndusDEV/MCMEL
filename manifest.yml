@@ -1,0 +1,34 @@
+app-id: dev.andus.mcmel
+runtime: org.kde.Platform
+runtime-version: '6.9'
+sdk: org.kde.Sdk
+command: mcmel
+
+finish-args:
+  - --filesystem=home
+  - --filesystem=~/.steam
+  - --filesystem=~/.var/app
+  - --talk-name=org.freedesktop.Flatpak
+  - --socket=x11
+  - --socket=wayland
+  - --share=network
+  - --talk-name=org.freedesktop.Application
+  - --env=STEAM_RUNTIME_HEAVY=true
+
+modules:
+  - name: mcmel
+    buildsystem: simple
+    build-commands:
+      - echo "Building MCMEL Flatpak"
+      - install -Dm755 mcmel /app/mcmel
+      - install -Dm666 games_config.json /app/games_config.json
+      - install -Dm644 -t /app/assets/ui assets/ui/*
+      - install -Dm644 -t /app/assets/images assets/images/*
+      # - install -Dm644 -t /app/assets/icons assets/icons/*
+      - mkdir -p /app/bin && touch /app/bin/mcmel
+      - echo '#!/bin/sh' >> /app/bin/mcmel
+      - echo 'cd /app && exec ./mcmel "$@"' >> /app/bin/mcmel
+      - chmod +x /app/bin/mcmel
+    sources:
+      - type: dir
+        path: dist
