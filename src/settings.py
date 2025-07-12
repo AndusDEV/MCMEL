@@ -86,6 +86,13 @@ class SettingsDialog(QDialog):
         outer_layout = QVBoxLayout(self)
         outer_layout.addWidget(scroll)
 
+        info_label = QLabel(
+            'Read the <a href="https://github.com/AndusDEV/MCMEL/blob/master/README.md">project\'s README on GitHub</a> to learn how to configure the launcher.'
+        )
+        info_label.setOpenExternalLinks(True)
+        info_label.setWordWrap(True)
+        layout.addWidget(info_label)
+
         for game, cfg in self.config.items():
             box = QGroupBox(game)
             box_layout = QVBoxLayout(box)
@@ -168,6 +175,11 @@ class SettingsDialog(QDialog):
             layout.addWidget(box)
 
         layout.addItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
+
+        github_label = QLabel('<a href="https://github.com/AndusDEV/MCMEL">MCMEL GitHub Repo</a>')
+        github_label.setOpenExternalLinks(True)
+        github_label.setWordWrap(True)
+        layout.addWidget(github_label)
 
         btn_row = QHBoxLayout()
         btn_save, btn_cancel = QPushButton("Save"), QPushButton("Cancel")
