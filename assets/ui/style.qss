@@ -147,9 +147,14 @@ QRadioButton::indicator {
     background-color: #444;
     border: 1px solid #555;
 }
+QCheckBox::indicator:disabled,
+QRadioButton::indicator:disabled {
+    background-color: #d45959;
+    border: 1px solid #555;
+}
 
 QScrollBar:vertical, QScrollBar:horizontal {
-    background-color: #1c1c1c;
+    background-color: #000000;
     border: none;
     width: 10px;
     margin: 2px;

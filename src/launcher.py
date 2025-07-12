@@ -237,6 +237,7 @@ class Launcher(QWidget):
         config = self.game_configs.get(game.name, {})
         exec_path = config.get("exec_path")
         game_type = config.get("type", "native")
+        game_version = config.get("version", "steam")
         rom_path = config.get("rom_path", "")
 
         args = []
@@ -264,9 +265,17 @@ class Launcher(QWidget):
         elif game.name == "Minecraft Legends":
             args = ["xdg-open", "steam://run/1928870"]
 
-        elif game.name in ["Minecraft: Story Mode", "Minecraft Story Mode: Season 2"]:
-            QMessageBox.warning(self, "Not Implemented", "This game is not implemented yet.")
-            return
+        elif game.name in ["Minecraft: Story Mode"]:
+            if game_version == "steam":
+                args = ["xdg-open", "steam://run/376870"]
+            else:
+                args = ["xdg-open", f"lutris:rungameid/{exec_path}"]
+        
+        elif game.name in ["Minecraft Story Mode: Season 2"]:
+            if game_version == "steam":
+                args = ["xdg-open", "steam://run/639170"]
+            else:
+                args = ["xdg-open", f"lutris:rungameid/{exec_path}"]
 
         elif game.name == "Minecraft: Xbox 360 Edition":
             parent = os.path.dirname(os.path.realpath(exec_path))

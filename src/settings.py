@@ -25,11 +25,13 @@ DEFAULTS = {
     "show": False
   },
   "Minecraft: Story Mode": {
-    "exec_path": "lutris:rungame/minecraft-story-mode",
+    "version": "steam",
+    "exec_path": "1",
     "show": False
   },
   "Minecraft Story Mode: Season 2": {
-    "exec_path": "lutris:rungame/minecraft-story-mode-season-2",
+    "version": "steam",
+    "exec_path": "2",
     "show": False
   },
   "Minecraft: Xbox 360 Edition": {
@@ -107,11 +109,25 @@ class SettingsDialog(QDialog):
                 (rb_flatpak if cfg.get("type") == "flatpak" else rb_native).setChecked(True)
 
                 row = QHBoxLayout()
-                row.addWidget(QLabel("Launcher type:"))
+                row.addWidget(QLabel("Launcher Type:"))
                 row.addWidget(rb_native)
                 row.addWidget(rb_flatpak)
                 box_layout.addLayout(row)
                 self.edits[(game, "type")] = bg
+            
+            # Game version (only for Story Mode 1/2)
+            if game in ["Minecraft: Story Mode", "Minecraft Story Mode: Season 2"]:
+                rb_steam, rb_lutris = QRadioButton("Steam"), QRadioButton("Lutris (GOG)")
+                bg = QButtonGroup(self)
+                bg.addButton(rb_steam); bg.addButton(rb_lutris)
+                (rb_lutris if cfg.get("version") == "lutris" else rb_steam).setChecked(True)
+                
+                row = QHBoxLayout()
+                row.addWidget(QLabel("Game Version:"))
+                row.addWidget(rb_steam)
+                row.addWidget(rb_lutris)
+                box_layout.addLayout(row)
+                self.edits[(game, "version")] = bg
 
             # Exec path
             if "exec_path" in cfg:
@@ -171,6 +187,8 @@ class SettingsDialog(QDialog):
                 val = widget.isChecked()
             elif key == "type":
                 val = "flatpak" if widget.buttons()[1].isChecked() else "native"
+            elif key == "version":
+                val = "lutris" if widget.buttons()[1].isChecked() else "steam"
             else:
                 val = widget.text().strip()
             self.config.setdefault(game, {})[key] = val

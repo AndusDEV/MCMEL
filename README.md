@@ -76,9 +76,6 @@ Doesn't require any setup outside toggling "Show" in Settings
 
 ### Minecraft: Story Mode (Season 1 and 2):
 
-> [!IMPORTANT]  
-> Those editions aren't currently supported and are not shown in settings
-
 #### Requirements:
 
 - Minecraft: Story Mode Season 1 / 2 **bought on one of those platforms:**
@@ -87,9 +84,9 @@ Doesn't require any setup outside toggling "Show" in Settings
 
 #### Setup:
 
-- (When using GOG version) the games' slugs should be named
-  `minecraft-story-mode` and `minecraft-story-mode-season-2` respectively in Lutris.
 - Doesn't require any setup outside toggling "Show" in Settings.
+- (When using GOG version) Executable should just be a game id from lutris
+![How to get Lutris ID](repo-screenshots/lutris-id.png)
 
 ### Minecraft: Xbox 360 Edition:
 
