@@ -6,9 +6,60 @@ from PyQt5.QtWidgets import (
 )
 
 CONFIG_FILE = "games_config.json"
+DEFAULTS = {
+  "Minecraft: Java Edition": {
+    "type": "flatpak",
+    "exec_path": "org.prismlauncher.PrismLauncher",
+    "instances_path": "/home/user/.var/app/org.prismlauncher.PrismLauncher/data/PrismLauncher/instances",
+    "show": True
+  },
+  "Minecraft: Bedrock Edition": {
+    "type": "flatpak",
+    "exec_path": "io.mrarm.mcpelauncher",
+    "show": True
+  },
+  "Minecraft Dungeons": {
+    "show": False
+  },
+  "Minecraft Legends": {
+    "show": False
+  },
+  "Minecraft: Story Mode": {
+    "exec_path": "lutris:rungame/minecraft-story-mode",
+    "show": False
+  },
+  "Minecraft Story Mode: Season 2": {
+    "exec_path": "lutris:rungame/minecraft-story-mode-season-2",
+    "show": False
+  },
+  "Minecraft: Xbox 360 Edition": {
+    "exec_path": "/path/to/xenia",
+    "rom_path": "/path/to/minecraft",
+    "show": False
+  },
+  "Minecraft Classic": {
+    "show": False
+  }
+}
+DESCRIPTIONS = {
+    "Minecraft: Java Edition": "Utilizes MultiMC (or forks)",
+    "Minecraft: Bedrock Edition": "Utilizes MCPE Launcher",
+    "Minecraft Dungeons": "Launches Steam version",
+    "Minecraft Legends": "Launches Steam version",
+    "Minecraft: Story Mode": "Launches Steam or Lutris (GOG) version",
+    "Minecraft Story Mode: Season 2": "Launches Steam or Lutris (GOG) version",
+    "Minecraft: Xbox 360 Edition": "Utilizes Xenia Emulator",
+    "Minecraft Classic": "Launches classic.minecraft.net in the browser"
+}
 
 def load_config():
-    return json.load(open(CONFIG_FILE)) if os.path.exists(CONFIG_FILE) else {}
+    cfg = DEFAULTS.copy()
+    if os.path.exists(CONFIG_FILE):
+        user_cfg = json.load(open(CONFIG_FILE))
+        for game, game_cfg in user_cfg.items():
+            cfg.setdefault(game, {})
+            cfg[game].update(game_cfg)
+    return cfg
 
 def save_config(cfg):
     with open(CONFIG_FILE, "w") as f:
@@ -36,6 +87,11 @@ class SettingsDialog(QDialog):
         for game, cfg in self.config.items():
             box = QGroupBox(game)
             box_layout = QVBoxLayout(box)
+
+            description_label = QLabel(DESCRIPTIONS.get(game, ""))
+            description_label.setWordWrap(True)
+            description_label.setStyleSheet("color: white; font-size: 12px; font-style: italic;")
+            box_layout.addWidget(description_label)
 
             # Show checkbox
             show_cb = QCheckBox("Show in launcher")

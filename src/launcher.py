@@ -29,6 +29,7 @@ class Launcher(QWidget):
             GameInfo("Minecraft: Story Mode", "./assets/images/mcsm.jpg", "./assets/icons/game/mcsm.png"),
             GameInfo("Minecraft Story Mode: Season 2", "./assets/images/mcsm2.jpg", "./assets/icons/game/mcsm2.png"),
             GameInfo("Minecraft: Xbox 360 Edition", "./assets/images/mc360.png", "./assets/icons/game/mc360.png"),
+            GameInfo("Minecraft Classic", "./assets/images/mcc.png", "./assets/icons/game/mcc.png")
         ]
 
         self.games = [g for g in self.games if self.game_configs.get(g.name, {}).get("show", False)]
@@ -166,7 +167,10 @@ class Launcher(QWidget):
             return
 
         default_icon = QIcon("./assets/icons/game/mcje.png")
-        versions = sorted(f for f in os.listdir(path) if isdir(join(path, f)) and f != ".LAUNCHER_TEMP")
+        versions = sorted(
+            f for f in os.listdir(path)
+            if isdir(join(path, f)) and not f.startswith(".")
+        )
 
         if not versions:
             self.version_selector.addItem("No instances found")
@@ -235,10 +239,6 @@ class Launcher(QWidget):
         game_type = config.get("type", "native")
         rom_path = config.get("rom_path", "")
 
-        if not exec_path:
-            QMessageBox.warning(self, "Error", "No exec path configured.")
-            return
-
         args = []
 
         if game.name == "Minecraft: Java Edition":
@@ -281,6 +281,10 @@ class Launcher(QWidget):
             args = [proton, "run", exec_path, rom_path]
             subprocess.Popen(args, cwd=parent, env=env)
             return
+
+        elif game.name == "Minecraft Classic":
+            args = ["xdg-open", "https://classic.minecraft.net"]
+        
         else:
             QMessageBox.warning(self, "Unknown Game Type", f"Handling for {game.name} is not defined.")
             return
