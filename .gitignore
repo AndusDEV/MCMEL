@@ -5,3 +5,5 @@
 /builddir
 /.venv
 /.flatpak-builder
+
+src/__pycache__/

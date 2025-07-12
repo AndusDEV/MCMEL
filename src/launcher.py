@@ -4,10 +4,10 @@ import os
 import subprocess
 from os.path import isdir, join
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtWidgets import (
     QWidget, QListWidget, QListWidgetItem, QLabel, QPushButton,
-    QHBoxLayout, QVBoxLayout, QMessageBox, QComboBox
+    QHBoxLayout, QVBoxLayout, QMessageBox, QComboBox, QListView, QStyledItemDelegate
 )
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5 import uic
@@ -64,8 +64,18 @@ class Launcher(QWidget):
         self.game_image.setFixedSize(700, 394)
         self.game_image.setScaledContents(True)
 
+        self.account_selector = QComboBox()
+        self.account_selector.hide()
+        account_delegate = QStyledItemDelegate()
+        self.account_selector.setView(QListView())
+        self.account_selector.view().setItemDelegate(account_delegate)
+
+
         self.version_selector = QComboBox()
         self.version_selector.hide()
+        version_delegate = QStyledItemDelegate()
+        self.version_selector.setView(QListView())
+        self.version_selector.view().setItemDelegate(version_delegate)
 
         self.launch_button = QPushButton("Launch")
 
@@ -80,7 +90,12 @@ class Launcher(QWidget):
         right_layout.addWidget(self.version_selector)
         right_layout.addWidget(self.launch_button)
         right_layout.addStretch()
-        right_layout.addWidget(self.open_launcher_button, alignment=Qt.AlignRight)
+
+        bottom_right_layout = QHBoxLayout()
+        bottom_right_layout.addWidget(self.account_selector, alignment=Qt.AlignLeft)
+        bottom_right_layout.addStretch()
+        bottom_right_layout.addWidget(self.open_launcher_button, alignment=Qt.AlignRight)
+        right_layout.addLayout(bottom_right_layout)
 
         main_layout.addLayout(left_layout)
         main_layout.addLayout(right_layout)
@@ -104,16 +119,43 @@ class Launcher(QWidget):
             self.game_image.setText("No Image")
 
         if game.name == "Minecraft: Java Edition":
+            self.account_selector.show()
             self.version_selector.show()
+            self.populate_accounts_java()
             self.populate_versions_java()
             self.open_launcher_button.show()
         elif game.name == "Minecraft: Bedrock Edition":
+            self.account_selector.hide()
             self.version_selector.show()
             self.populate_versions_bedrock()
             self.open_launcher_button.show()
         else:
+            self.account_selector.hide()
             self.version_selector.hide()
             self.open_launcher_button.hide()
+
+
+    def populate_accounts_java(self):
+        self.account_selector.clear()
+        config = self.game_configs.get(self.games[self.current_game_index].name, {})
+        instances_path = config.get("instances_path", "")
+        accounts_path = os.path.join(os.path.dirname(instances_path), "accounts.json")
+        with open(accounts_path) as f:
+            accounts = json.load(f)
+
+        if not accounts_path or not os.path.exists(accounts_path):
+            self.account_selector.addItem("No accounts found")
+            return
+
+        profile_names = []
+
+        for account in accounts.get("accounts", []):
+            profile = account.get("profile")
+            if profile and "name" in profile:
+                profile_names.append(profile["name"])
+
+        self.account_selector.addItems(profile_names)
+
 
     def populate_versions_java(self):
         self.version_selector.clear()
@@ -157,7 +199,7 @@ class Launcher(QWidget):
         ini.read(ini_path)
         profiles = [s for s in ini.sections() if s != "General"]
 
-        icon = QIcon("./assets/icons/mcbe.png")
+        icon = QIcon("./assets/icons/game/mcbe.png")
 
         if not profiles:
             self.version_selector.addItem("No profiles found")

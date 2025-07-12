@@ -39,13 +39,56 @@ QGroupBox::title {
     font-weight: bold;
 }
 
-QLineEdit, QComboBox {
+QLineEdit {
     background-color: #2b2b2b;
     border: 1px solid #555;
     padding: 6px;
     color: #e0e0e0;
     border-radius: 3px;
 }
+
+QComboBox {
+    background-color: #2f2f2f;
+    border: 1px solid #555;
+    padding: 8px 6px;
+    color: #e0e0e0;
+    border-radius: 4px;
+    min-height: 32px;
+}
+
+QComboBox::drop-down {
+    width: 40px;
+    border-left: 1px solid #555;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+QComboBox::down-arrow {
+    image: url(./assets/icons/arrow_down.png);
+    width: 12px;
+    height: 12px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #2b2b2b;
+    border: 1px solid #444;
+    selection-background-color: #3c3c3c;
+    color: #e0e0e0;
+}
+
+QComboBox QAbstractItemView::item {
+    background-color: #2b2b2b;
+    color: #e0e0e0;
+    padding: 6px 10px;
+    height: 28px;
+    border-bottom: 1px solid #333;
+}
+
+QComboBox QAbstractItemView::item:selected {
+    background-color: #3c3c3c;
+    color: #a4d07b;
+    border-left: 5px solid #4caf50;
+}
+
 
 QLabel {
     background: transparent;
@@ -60,6 +103,7 @@ QPushButton {
     border-radius: 4px;
     padding: 8px 16px;
     font-size: 14px;
+    min-height: 32px;
 }
 
 QPushButton:hover {
