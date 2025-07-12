@@ -124,33 +124,46 @@ class Launcher(QWidget):
             self.version_selector.addItem("No instances found")
             return
 
-        versions = [f for f in os.listdir(path) if isdir(join(path, f)) and f != ".LAUNCHER_TEMP"]
-        self.version_selector.addItems(sorted(versions) if versions else ["No instances found"])
+        default_icon = QIcon("./assets/icons/game/mcje.png")
+        versions = sorted(f for f in os.listdir(path) if isdir(join(path, f)) and f != ".LAUNCHER_TEMP")
+
+        if not versions:
+            self.version_selector.addItem("No instances found")
+            return
+
+        for v in versions:
+            vp = join(path, v)
+            for folder in ("minecraft", ".minecraft"):
+                icon_file = join(vp, folder, "icon.png")
+                if os.path.exists(icon_file):
+                    break
+            else:
+                icon_file = None
+            self.version_selector.addItem(QIcon(icon_file) if icon_file else default_icon, v)
 
     def populate_versions_bedrock(self):
         self.version_selector.clear()
-        game = self.games[self.current_game_index]
-        config = self.game_configs.get(game.name, {})
+        config = self.game_configs.get(self.games[self.current_game_index].name, {})
 
-        flatpak_path = os.path.expanduser("~/.var/app/io.mrarm.mcpelauncher/data/mcpelauncher/profiles/profiles.ini")
-        native_path = os.path.expanduser("~/.local/share/mcpelauncher/profiles/profiles.ini")
+        flatpak = os.path.expanduser("~/.var/app/io.mrarm.mcpelauncher/data/mcpelauncher/profiles/profiles.ini")
+        native = os.path.expanduser("~/.local/share/mcpelauncher/profiles/profiles.ini")
+        ini_path = flatpak if os.path.exists(flatpak) else native if os.path.exists(native) else None
 
-        ini_path = flatpak_path if os.path.exists(flatpak_path) else native_path if os.path.exists(
-            native_path) else None
         if not ini_path:
             self.version_selector.addItem("No profiles.ini found")
             return
 
         ini = configparser.ConfigParser()
         ini.read(ini_path)
+        profiles = [s for s in ini.sections() if s != "General"]
 
-        profiles = [section for section in ini.sections() if section != "General"]
+        icon = QIcon("./assets/icons/mcbe.png")
 
         if not profiles:
             self.version_selector.addItem("No profiles found")
         else:
-            decoded = [section.replace('%20', ' ') for section in profiles]
-            self.version_selector.addItems(decoded)
+            for p in profiles:
+                self.version_selector.addItem(icon, p.replace('%20', ' '))
 
     def open_original_launcher(self):
         if self.current_game_index == -1:
