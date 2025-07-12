@@ -70,7 +70,6 @@ class Launcher(QWidget):
         self.account_selector.setView(QListView())
         self.account_selector.view().setItemDelegate(account_delegate)
 
-
         self.version_selector = QComboBox()
         self.version_selector.hide()
         version_delegate = QStyledItemDelegate()
@@ -244,10 +243,14 @@ class Launcher(QWidget):
 
         if game.name == "Minecraft: Java Edition":
             instance = self.version_selector.currentText()
+            account = self.account_selector.currentText()
             if instance in ("No instances found", "", None):
                 QMessageBox.warning(self, "Error", "No valid instance selected.")
                 return
-            args = ["flatpak", "run", exec_path, "-l", instance] if game_type == "flatpak" else [exec_path, "-l", instance]
+            if account in ("No accounts found", "", None):
+                QMessageBox.warning(self, "Error", "No valid account selected.")
+                return
+            args = ["flatpak", "run", exec_path, "-l", instance, "-a", account] if game_type == "flatpak" else [exec_path, "-l", instance, "-a", account]
 
         elif game.name == "Minecraft: Bedrock Edition":
             version = self.version_selector.currentText()
