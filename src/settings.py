@@ -41,8 +41,20 @@ DEFAULTS = {
   },
   "Minecraft Classic": {
     "show": False
-  }
+  },
+  "update_check": True,
 }
+
+GAMES = [
+    "Minecraft: Java Edition",
+    "Minecraft: Bedrock Edition",
+    "Minecraft Dungeons",
+    "Minecraft Legends",
+    "Minecraft: Story Mode",
+    "Minecraft Story Mode: Season 2",
+    "Minecraft: Xbox 360 Edition",
+    "Minecraft Classic"
+]
 DESCRIPTIONS = {
     "Minecraft: Java Edition": "Utilizes MultiMC (or forks)",
     "Minecraft: Bedrock Edition": "Utilizes MCPE Launcher",
@@ -58,9 +70,12 @@ def load_config():
     cfg = DEFAULTS.copy()
     if os.path.exists(CONFIG_FILE):
         user_cfg = json.load(open(CONFIG_FILE))
-        for game, game_cfg in user_cfg.items():
-            cfg.setdefault(game, {})
-            cfg[game].update(game_cfg)
+        for key, val in user_cfg.items():
+            if key in GAMES:
+                cfg.setdefault(key, {})
+                cfg[key].update(val)
+            elif key == "update_check":
+                cfg["update_check"] = val
     return cfg
 
 def save_config(cfg):
@@ -86,20 +101,27 @@ class SettingsDialog(QDialog):
         outer_layout = QVBoxLayout(self)
         outer_layout.addWidget(scroll)
 
+        games_config_label = QLabel("Games Config:")
+        games_config_label.setObjectName("SettingsLabel")
+        games_config_label.setWordWrap(True)
+        layout.addWidget(games_config_label)
+
         info_label = QLabel(
-            'Read the <a href="https://github.com/AndusDEV/MCMEL/blob/master/README.md">project\'s README on GitHub</a> to learn how to configure the launcher.'
-        )
+            'Read the <a href="https://github.com/AndusDEV/MCMEL/blob/master/README.md">project\'s README on GitHub</a> \
+            to learn how to configure the launcher.'
+            )
         info_label.setOpenExternalLinks(True)
         info_label.setWordWrap(True)
         layout.addWidget(info_label)
 
-        for game, cfg in self.config.items():
+        for game in GAMES:
+            cfg = self.config.get(game, {})
             box = QGroupBox(game)
             box_layout = QVBoxLayout(box)
 
             description_label = QLabel(DESCRIPTIONS.get(game, ""))
             description_label.setWordWrap(True)
-            description_label.setStyleSheet("color: white; font-size: 12px; font-style: italic;")
+            description_label.setObjectName("SettingsDescriptionLabel")
             box_layout.addWidget(description_label)
 
             # Show checkbox
@@ -176,6 +198,15 @@ class SettingsDialog(QDialog):
 
         layout.addItem(QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
+        mcmel_settings_label = QLabel("MCMEL Settings:")
+        mcmel_settings_label.setObjectName("SettingsLabel")
+        mcmel_settings_label.setWordWrap(True)
+        layout.addWidget(mcmel_settings_label)
+
+        self.update_check = QCheckBox("Check For Updates On Start")
+        self.update_check.setChecked(self.config.get("update_check", True))
+        layout.addWidget(self.update_check)
+
         github_label = QLabel('<a href="https://github.com/AndusDEV/MCMEL">MCMEL GitHub Repo</a>')
         github_label.setOpenExternalLinks(True)
         github_label.setWordWrap(True)
@@ -204,6 +235,8 @@ class SettingsDialog(QDialog):
             else:
                 val = widget.text().strip()
             self.config.setdefault(game, {})[key] = val
+        
+        self.config["update_check"] = self.update_check.isChecked()
 
         try:
             save_config(self.config)

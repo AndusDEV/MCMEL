@@ -13,6 +13,7 @@ from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5 import uic
 from src.game_info import GameInfo
 from src.settings import SettingsDialog
+from src.update_check import UpdateCheckDialog, check_for_update
 
 class Launcher(QWidget):
     def __init__(self, parent=None):
@@ -31,8 +32,17 @@ class Launcher(QWidget):
             GameInfo("Minecraft: Xbox 360 Edition", "./assets/images/mc360.png", "./assets/icons/game/mc360.png"),
             GameInfo("Minecraft Classic", "./assets/images/mcc.png", "./assets/icons/game/mcc.png")
         ]
-
         self.games = [g for g in self.games if self.game_configs.get(g.name, {}).get("show", False)]
+
+        self.load_stylesheet("assets/ui/style.qss")
+
+        update_available, message = check_for_update()
+        
+        if update_available:
+            dialog = UpdateCheckDialog(message, stylesheet=self.styleSheet())
+            dialog.exec_()
+        else:
+            print(message)
 
         self.current_game_index = -1
         self.setup_ui()
