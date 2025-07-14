@@ -60,9 +60,8 @@ class Launcher(QWidget):
             item = QListWidgetItem(QIcon(game.icon_path), game.name)
             self.game_list.addItem(item)
 
-        self.settings_button = QPushButton()
+        self.settings_button = QPushButton("Settings")
         self.settings_button.setIcon(QIcon("./assets/icons/settings.png"))
-        self.settings_button.setText("Settings")
         self.settings_button.clicked.connect(self.open_settings)
         self.settings_button.setObjectName("SettingsButton")
 
@@ -88,11 +87,12 @@ class Launcher(QWidget):
         self.version_selector.view().setItemDelegate(version_delegate)
 
         self.launch_button = QPushButton("Launch")
+        self.launch_button.setIcon(QIcon("./assets/icons/launch.png"))
+        self.launch_button.setIconSize(self.launch_button.sizeHint())
 
-        self.open_launcher_button = QPushButton()
+        self.open_launcher_button = QPushButton("Open Original Launcher")
         self.open_launcher_button.setIcon(QIcon("./assets/icons/open_launcher.png"))
         self.open_launcher_button.setIconSize(self.launch_button.sizeHint())
-        self.open_launcher_button.setText("Open Original Launcher")
         self.open_launcher_button.hide()
         self.open_launcher_button.clicked.connect(self.open_original_launcher)
 

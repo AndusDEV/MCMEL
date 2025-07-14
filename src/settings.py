@@ -107,7 +107,7 @@ class SettingsDialog(QDialog):
         layout.addWidget(games_config_label)
 
         info_label = QLabel(
-            'Read the <a href="https://github.com/AndusDEV/MCMEL/blob/master/README.md">project\'s README on GitHub</a> \
+            'Read the <a href="https://github.com/AndusDEV/MCMEL/blob/master/README.md#how-to-configure-the-editions">project\'s README on GitHub</a> \
             to learn how to configure the launcher.'
             )
         info_label.setOpenExternalLinks(True)
