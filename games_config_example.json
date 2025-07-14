@@ -17,16 +17,22 @@
     "show": false
   },
   "Minecraft: Story Mode": {
-    "exec_path": "lutris:rungame/minecraft-story-mode",
+    "version": "lutris",
+    "exec_path": "1",
     "show": false
   },
   "Minecraft Story Mode: Season 2": {
-    "exec_path": "lutris:rungame/minecraft-story-mode-season-2",
+    "version": "lutris",
+    "exec_path": "2",
     "show": false
   },
   "Minecraft: Xbox 360 Edition": {
     "exec_path": "/path/to/xenia",
     "rom_path": "/path/to/minecraft",
     "show": false
-  }
+  },
+  "Minecraft Classic": {
+    "show": false
+  },
+  "update_check": true
 }
