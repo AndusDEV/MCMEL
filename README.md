@@ -4,8 +4,16 @@
 Minecraft: Multi-Edition Launcher (MCMEL in short) is a launcher for Linux that allows you to launch multiple editions
 of Minecraft in one launcher.
 
+**[Website](https://mcmel.andus.dev)**
+
 > [!IMPORTANT]  
 > This project doesn't support piracy! Please buy the games you're using with this launcher.
+
+## FAQ:
+- **[Why it exists?](#why-it-exists)**
+- **[How do I hide/show editions?](#how-do-i-hideshow-editions)**
+- **[How to configure the editions?](#how-to-configure-the-editions)**
+- **[Credits](#how-to-configure-the-editions)**
 
 ## Why it exists?
 
