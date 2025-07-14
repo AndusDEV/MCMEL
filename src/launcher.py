@@ -150,12 +150,13 @@ class Launcher(QWidget):
         config = self.game_configs.get(self.games[self.current_game_index].name, {})
         instances_path = config.get("instances_path", "")
         accounts_path = os.path.join(os.path.dirname(instances_path), "accounts.json")
-        with open(accounts_path) as f:
-            accounts = json.load(f)
 
         if not accounts_path or not os.path.exists(accounts_path):
             self.account_selector.addItem("No accounts found")
             return
+        
+        with open(accounts_path) as f:
+            accounts = json.load(f)
 
         profile_names = []
 

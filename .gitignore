@@ -3,7 +3,7 @@
 /dist
 /repo
 /builddir
-/.venv
+/venv
 /.flatpak-builder
 
 src/__pycache__/

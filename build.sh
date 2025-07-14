@@ -11,7 +11,7 @@ pyinstaller main.py --onefile --windowed --name=mcmel
 echo -e "${BLUE_BOLD} > Copying required folders and files${CYAN}"
 mkdir -p dist/assets/images && cp -r assets/images/* dist/assets/images/
 mkdir -p dist/assets/ui && cp -r assets/ui/* dist/assets/ui/
-#mkdir -p dist/assets/icons && cp -r assets/icons/* dist/assets/icons/
+mkdir -p dist/assets/icons && cp -r assets/icons/* dist/assets/icons/
 cp games_config_example.json dist/games_config.json
 
 # echo -e "${BLUE_BOLD} > Generating MCMEL Flatpak${CYAN}"
