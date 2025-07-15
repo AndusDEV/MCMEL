@@ -7,7 +7,8 @@ from os.path import isdir, join
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtWidgets import (
     QWidget, QListWidget, QListWidgetItem, QLabel, QPushButton,
-    QHBoxLayout, QVBoxLayout, QMessageBox, QComboBox, QListView, QStyledItemDelegate
+    QHBoxLayout, QVBoxLayout, QMessageBox, QComboBox, QListView,
+    QStyledItemDelegate, QCheckBox
 )
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5 import uic
@@ -86,6 +87,22 @@ class Launcher(QWidget):
         self.version_selector.setView(QListView())
         self.version_selector.view().setItemDelegate(version_delegate)
 
+        splitscreen = QHBoxLayout()
+        self.splitscreen_checkbox = QCheckBox("Enable Splitscreen")
+        self.splitscreen_checkbox.setObjectName("SplitscreenCheckbox")
+        self.splitscreen_account_label = QLabel("Second Account:")
+        self.splitscreen_account_label.hide()
+        self.splitscreen_account_selector = QComboBox()
+        self.splitscreen_account_selector.hide()
+        splitscreen_account_delegate = QStyledItemDelegate()
+        self.splitscreen_account_selector.setView(QListView())
+        self.splitscreen_account_selector.view().setItemDelegate(splitscreen_account_delegate)
+
+        splitscreen.addWidget(self.splitscreen_checkbox)
+        splitscreen.addStretch()
+        splitscreen.addWidget(self.splitscreen_account_label)
+        splitscreen.addWidget(self.splitscreen_account_selector)
+
         self.launch_button = QPushButton("Launch")
         self.launch_button.setIcon(QIcon("./assets/icons/launch.png"))
         self.launch_button.setIconSize(self.launch_button.sizeHint())
@@ -99,6 +116,8 @@ class Launcher(QWidget):
         right_layout.addWidget(self.game_image)
         right_layout.addWidget(self.version_selector)
         right_layout.addWidget(self.launch_button)
+        right_layout.addStretch()
+        right_layout.addLayout(splitscreen)
         right_layout.addStretch()
 
         bottom_right_layout = QHBoxLayout()
@@ -134,8 +153,16 @@ class Launcher(QWidget):
             self.populate_accounts_java()
             self.populate_versions_java()
             self.open_launcher_button.show()
+            
+            self.splitscreen_checkbox.show()
+            self.splitscreen_account_label.show()
+            self.splitscreen_account_selector.show()
         elif game.name == "Minecraft: Bedrock Edition":
             self.account_selector.hide()
+            self.splitscreen_checkbox.hide()
+            self.splitscreen_account_label.hide()
+            self.splitscreen_account_selector.hide()
+            self.splitscreen_checkbox.setChecked(False)
             self.version_selector.show()
             self.populate_versions_bedrock()
             self.open_launcher_button.show()
@@ -143,10 +170,15 @@ class Launcher(QWidget):
             self.account_selector.hide()
             self.version_selector.hide()
             self.open_launcher_button.hide()
+            self.splitscreen_checkbox.hide()
+            self.splitscreen_account_label.hide()
+            self.splitscreen_account_selector.hide()
+            self.splitscreen_checkbox.setChecked(False)
 
 
     def populate_accounts_java(self):
         self.account_selector.clear()
+        self.splitscreen_account_selector.clear()
         config = self.game_configs.get(self.games[self.current_game_index].name, {})
         instances_path = config.get("instances_path", "")
         accounts_path = os.path.join(os.path.dirname(instances_path), "accounts.json")
@@ -166,6 +198,7 @@ class Launcher(QWidget):
                 profile_names.append(profile["name"])
 
         self.account_selector.addItems(profile_names)
+        self.splitscreen_account_selector.addItems(profile_names)
 
 
     def populate_versions_java(self):
@@ -262,7 +295,30 @@ class Launcher(QWidget):
             if account in ("No accounts found", "", None):
                 QMessageBox.warning(self, "Error", "No valid account selected.")
                 return
-            args = ["flatpak", "run", exec_path, "-l", instance, "-a", account] if game_type == "flatpak" else [exec_path, "-l", instance, "-a", account]
+
+            base_args = ["flatpak", "run", exec_path, "-l", instance, "-a", account] if game_type == "flatpak" else [exec_path, "-l", instance, "-a", account]
+
+            if self.splitscreen_checkbox.isChecked():
+                splitscreen_account = self.splitscreen_account_selector.currentText()
+                if splitscreen_account in ("No accounts found", "", None):
+                    QMessageBox.warning(self, "Error", "No valid splitscreen account selected.")
+                    return
+                if splitscreen_account == account:
+                    QMessageBox.warning(self, "Error", "The same account can’t be used for splitscreen.\nSelect a different account or create a new one.")
+                    return
+
+                instance2 = instance + " 2"
+
+                args2 = ["flatpak", "run", exec_path, "-l", instance2, "-a", splitscreen_account] if game_type == "flatpak" else [exec_path, "-l", instance2, "-a", splitscreen_account]
+
+                try:
+                    subprocess.Popen(base_args)
+                    subprocess.Popen(args2)
+                except Exception as e:
+                    QMessageBox.critical(self, "Launch Error", str(e))
+                return
+            else:
+                args = base_args
 
         elif game.name == "Minecraft: Bedrock Edition":
             version = self.version_selector.currentText()
