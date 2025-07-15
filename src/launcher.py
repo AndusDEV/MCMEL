@@ -90,6 +90,7 @@ class Launcher(QWidget):
         splitscreen = QHBoxLayout()
         self.splitscreen_checkbox = QCheckBox("Enable Splitscreen")
         self.splitscreen_checkbox.setObjectName("SplitscreenCheckbox")
+        self.splitscreen_checkbox.stateChanged.connect(self.on_splitscreen_checkbox_toggled)
         self.splitscreen_account_label = QLabel("Second Account:")
         self.splitscreen_account_label.hide()
         self.splitscreen_account_selector = QComboBox()
@@ -153,10 +154,7 @@ class Launcher(QWidget):
             self.populate_accounts_java()
             self.populate_versions_java()
             self.open_launcher_button.show()
-            
             self.splitscreen_checkbox.show()
-            self.splitscreen_account_label.show()
-            self.splitscreen_account_selector.show()
         elif game.name == "Minecraft: Bedrock Edition":
             self.account_selector.hide()
             self.splitscreen_checkbox.hide()
@@ -369,6 +367,11 @@ class Launcher(QWidget):
             subprocess.Popen(args)
         except Exception as e:
             QMessageBox.critical(self, "Launch Error", str(e))
+    
+    def on_splitscreen_checkbox_toggled(self, state):
+        enabled = state == Qt.Checked
+        self.splitscreen_account_label.setVisible(enabled)
+        self.splitscreen_account_selector.setVisible(enabled)
 
     def open_settings(self):
         dlg = SettingsDialog(self)

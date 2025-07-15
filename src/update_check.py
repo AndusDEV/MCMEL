@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import (
     QApplication, QDialog, QVBoxLayout, QLabel, QPushButton
 )
 
-__version__ = "v0.2.0"
+__version__ = "v0.2.1"
 GITHUB_API = "https://api.github.com/repos/AndusDEV/MCMEL/releases/latest"
 
 def normalize_version(tag):
