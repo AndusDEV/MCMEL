@@ -12,6 +12,7 @@ of Minecraft in one launcher.
 ## FAQ:
 - **[Why it exists?](#why-it-exists)**
 - **[How do I hide/show editions?](#how-do-i-hideshow-editions)**
+- **[How to update MCMEL](#how-to-update-mcmel)**
 - **[How to configure the editions?](#how-to-configure-the-editions)**
   - [Minecraft: Java Edition](#minecraft-java-edition)
     - _[Splitscreen](#how-to-play-in-splitscreen-v021)_
@@ -35,6 +36,14 @@ In the **Settings** menu, each edition has a **"Show in launcher"** toggle.
 Simply enable or disable it based on which editions you want to appear in the launcher.
 
 ![screenshot](repo-screenshots/settings.png)
+
+## How to update MCMEL:
+
+1. Download the new version from [GitHub Releases](https://github.com/andusdev/mcmel/releases)
+2. Unzip the new version
+3. Replace the new games_config.json with the old one from your old MCMEL installation
+4. Start MCMEL!
+
 ## How to configure the editions?
 
 In **Settings**, you will find sections for each edition. Every edition has different things to setup:

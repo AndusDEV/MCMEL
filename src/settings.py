@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (
     QCheckBox, QRadioButton, QButtonGroup, QFileDialog, QMessageBox,
     QGroupBox, QSizePolicy, QSpacerItem, QScrollArea, QWidget
 )
+from src.update_check import __version__
 
 CONFIG_FILE = "games_config.json"
 DEFAULTS = {
@@ -211,6 +212,10 @@ class SettingsDialog(QDialog):
         github_label.setOpenExternalLinks(True)
         github_label.setWordWrap(True)
         layout.addWidget(github_label)
+
+        version_label = QLabel(f"Launcher Version: <strong>{__version__}</strong>")
+        version_label.setWordWrap(True)
+        layout.addWidget(version_label)
 
         btn_row = QHBoxLayout()
         btn_save, btn_cancel = QPushButton("Save"), QPushButton("Cancel")
